@@ -24,6 +24,7 @@ struct ContentView: View {
     
     var cards: some View {
         // Implicit return
+        // Makes a grid!
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
             ForEach(0..<cardCount, id: \.self){ index in
                 CardView(content: emojis[index])
