@@ -8,8 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    let emojis: [String] = ["👻", "🎃", "🕷️", "😈", "😈", "💀", "🕸️", "🧙", "🙀", "👹", "😱", "☠️", "🍭"]
-    @State var cardCount: Int = 4
+    @State var emojis: [String] = ["👻", "🎃", "🕷️", "😈", "😈", "💀", "🕸️", "🧙", "🙀", "👹", "😱", "☠️", "🍭", "👻", "🕸️", "🎃"]
+    let cardCount: Int = 16
+    
+    let halloween = ["👻", "🎃", "🕷️", "😈", "😈", "💀", "🕸️", "🧙", "🙀", "👹", "😱", "☠️", "🍭", "👻", "🕸️", "🎃"]
+    let sports = ["🎱", "🏓", "🏈", "🥎", "🏏", "🏈", "⚽️", "🎱", "🥎", "🏓", "⚾️", "⚾️", "🏐", "🏏", "⚽️", "🏐"]
+    let nature = ["🌞", "🌺", "🌈", "🌼", "🍃", "🌸", "🌞", "🌺", "🌧", "🌼", "🍃", "🌸", "🌞", "🌧", "🍃", "🌈"]
+
+    
     
     var body: some View {
         VStack{
@@ -18,7 +24,8 @@ struct ContentView: View {
                 cards
             }
             Spacer()
-            cardCountAdjusters
+            themeChangers
+            
         }
         .padding()
     }
@@ -33,7 +40,7 @@ struct ContentView: View {
     var cards: some View {
         // Implicit return
         // Makes a grid!
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
             ForEach(0..<cardCount, id: \.self){ index in
                 CardView(content: emojis[index])
                     .aspectRatio(2/3, contentMode: .fit)
@@ -42,37 +49,45 @@ struct ContentView: View {
         .foregroundColor(.orange)
     }
     
-    var cardCountAdjusters: some View {
-        HStack {
-            cardRemover
-            Spacer()
-            cardAdder
+    var themeChangers: some View {
+        HStack(alignment: .center) {
+            theme1BTN
+            theme2BTN
+            theme3BTN
         }
-        .imageScale(.large)
-        .font(.largeTitle)
+
     }
     
-    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
-        Button(action: {
-            cardCount += offset
-        }, label: {
-            Image(systemName: symbol)
-        })
-        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
+    func changeTheme(newTheme: [String], symbol: String, themeName: String) -> some View {
+        VStack{
+            Button(action: {
+                emojis = newTheme.shuffled()
+            }, label: {
+                Image(systemName: symbol)
+            })
+                .imageScale(.large)
+                .font(.largeTitle)
+            Text(themeName)
+                .font(.caption)
+        }
     }
     
-    var cardRemover: some View {
-        cardCountAdjuster(by: -1, symbol: "rectangle.stack.badge.minus.fill")
+    var theme1BTN: some View {
+        changeTheme(newTheme: halloween, symbol: "h.square.fill", themeName: "Halloween")
     }
     
-    var cardAdder: some View {
-        cardCountAdjuster(by: 1, symbol: "rectangle.stack.badge.plus.fill")
+    var theme2BTN: some View {
+        changeTheme(newTheme: sports, symbol: "soccerball", themeName: "Sports")
+    }
+    
+    var theme3BTN: some View {
+        changeTheme(newTheme: nature, symbol: "tree.fill", themeName: "Nature")
     }
 }
 
 struct CardView: View {
     let content: String // remember this cant be changed
-    @State var isFaceUp = true //an example of a default value for a parameter
+    @State var isFaceUp = false //an example of a default value for a parameter
     
     
     var body: some View {
