@@ -13,6 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         VStack{
+            title
             ScrollView {
                 cards
             }
@@ -20,6 +21,13 @@ struct ContentView: View {
             cardCountAdjusters
         }
         .padding()
+    }
+    
+    var title: some View {
+        HStack {
+            Text("Memorize!")
+                .font(.largeTitle)
+        }
     }
     
     var cards: some View {
